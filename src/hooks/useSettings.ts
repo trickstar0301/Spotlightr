@@ -8,6 +8,9 @@ export function useSettings() {
     const [alwaysOnTop, setAlwaysOnTop] = useState<boolean>(() => {
         return localStorage.getItem('alwaysOnTop') === 'true';
     });
+    const [autoOpenSearch, setAutoOpenSearch] = useState<boolean>(() => {
+        return localStorage.getItem('autoOpenSearch') === 'true';
+    });
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
     useEffect(() => {
@@ -30,12 +33,19 @@ export function useSettings() {
         }
     };
 
+    const handleAutoOpenSearchChange = (value: boolean) => {
+        setAutoOpenSearch(value);
+        localStorage.setItem('autoOpenSearch', String(value));
+    };
+
     return {
         editorCmd,
         alwaysOnTop,
+        autoOpenSearch,
         isSettingsOpen,
         setIsSettingsOpen,
         handleEditorChange,
-        handleAlwaysOnTopChange
+        handleAlwaysOnTopChange,
+        handleAutoOpenSearchChange
     };
 }

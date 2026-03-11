@@ -10,6 +10,7 @@ interface SortableWorkspaceTileProps {
     onToggleFavorite: (e: React.MouseEvent, id: string) => void;
     onEdit: (e: React.MouseEvent, workspace: Workspace) => void;
     compact?: boolean;
+    isSelected?: boolean;
 }
 
 export const SortableWorkspaceTile: React.FC<SortableWorkspaceTileProps> = ({
@@ -18,6 +19,7 @@ export const SortableWorkspaceTile: React.FC<SortableWorkspaceTileProps> = ({
     onToggleFavorite,
     onEdit,
     compact = false,
+    isSelected = false,
 }) => {
     const {
         attributes,
@@ -44,6 +46,7 @@ export const SortableWorkspaceTile: React.FC<SortableWorkspaceTileProps> = ({
                 onToggleFavorite={onToggleFavorite}
                 onEdit={onEdit}
                 compact={compact}
+                isSelected={isSelected}
             />
         </div>
     );

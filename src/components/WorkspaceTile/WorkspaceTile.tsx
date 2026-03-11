@@ -5,9 +5,10 @@ import { FaStar, FaRegStar, FaFolder, FaPen } from 'react-icons/fa';
 interface WorkspaceTileProps {
     workspace: Workspace;
     onClick: (path: string) => void;
-    onToggleFavorite: (e: React.MouseEvent, id: string) => void;
-    onEdit: (e: React.MouseEvent, workspace: Workspace) => void;
+    onToggleFavorite?: (e: React.MouseEvent, id: string) => void;
+    onEdit?: (e: React.MouseEvent, workspace: Workspace) => void;
     compact?: boolean;
+    isSelected?: boolean;
 }
 
 export const WorkspaceTile: React.FC<WorkspaceTileProps> = ({
@@ -16,6 +17,7 @@ export const WorkspaceTile: React.FC<WorkspaceTileProps> = ({
     onToggleFavorite,
     onEdit,
     compact = false,
+    isSelected = false,
 }) => {
     const handleTileClick = () => {
         onClick(workspace.path);
@@ -23,19 +25,20 @@ export const WorkspaceTile: React.FC<WorkspaceTileProps> = ({
 
     const handleFavoriteClick = (e: React.MouseEvent) => {
         e.stopPropagation();
-        onToggleFavorite(e, workspace.id);
+        onToggleFavorite?.(e, workspace.id);
     };
 
     const handleEditClick = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        onEdit(e, workspace);
+        onEdit?.(e, workspace);
     };
 
     if (compact) {
         return (
             <div
-                className="glass-panel dock-tile"
+                className={`glass-panel dock-tile ${isSelected ? 'selected' : ''}`}
+                data-workspace-id={workspace.id}
                 onClick={handleTileClick}
                 title={workspace.name}
             >
@@ -57,7 +60,8 @@ export const WorkspaceTile: React.FC<WorkspaceTileProps> = ({
 
     return (
         <div
-            className="glass-panel workspace-tile"
+            className={`glass-panel workspace-tile ${isSelected ? 'selected' : ''}`}
+            data-workspace-id={workspace.id}
             onClick={handleTileClick}
             onContextMenu={workspace.isFavorite ? handleEditClick : undefined}
             title={workspace.isFavorite ? "Right-click to edit" : undefined}

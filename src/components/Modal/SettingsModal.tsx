@@ -8,9 +8,11 @@ interface SettingsModalProps {
     onEditorChange: (cmd: string) => void;
     alwaysOnTop: boolean;
     onAlwaysOnTopChange: (value: boolean) => void;
+    autoOpenSearch: boolean;
+    onAutoOpenSearchChange: (value: boolean) => void;
 }
 
-export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, editorCmd, onEditorChange, alwaysOnTop, onAlwaysOnTopChange }) => {
+export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, editorCmd, onEditorChange, alwaysOnTop, onAlwaysOnTopChange, autoOpenSearch, onAutoOpenSearchChange }) => {
     const { theme, setTheme } = useTheme();
 
     if (!isOpen) return null;
@@ -91,6 +93,27 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, e
                                 type="button"
                                 className={!alwaysOnTop ? 'btn-primary' : 'btn-secondary'}
                                 onClick={() => onAlwaysOnTopChange(false)}
+                                style={{ padding: '0.5rem 1rem', fontSize: '0.9rem', borderRadius: '4px' }}
+                            >
+                                Off
+                            </button>
+                        </div>
+                    </div>
+                    <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem', alignItems: 'center' }}>
+                        <span style={{ fontSize: '0.9rem', flex: 1 }}>Auto-open Search on Focus</span>
+                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                            <button
+                                type="button"
+                                className={autoOpenSearch ? 'btn-primary' : 'btn-secondary'}
+                                onClick={() => onAutoOpenSearchChange(true)}
+                                style={{ padding: '0.5rem 1rem', fontSize: '0.9rem', borderRadius: '4px' }}
+                            >
+                                On
+                            </button>
+                            <button
+                                type="button"
+                                className={!autoOpenSearch ? 'btn-primary' : 'btn-secondary'}
+                                onClick={() => onAutoOpenSearchChange(false)}
                                 style={{ padding: '0.5rem 1rem', fontSize: '0.9rem', borderRadius: '4px' }}
                             >
                                 Off
