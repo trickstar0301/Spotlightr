@@ -1,6 +1,6 @@
 [package]
 name = "spotlightr"
-version = "1.0.1"
+version = "1.0.2"
 description = "A desktop dashboard to quickly launch your recent and favorite workspaces."
 authors = ["trickstar"]
 edition = "2024"

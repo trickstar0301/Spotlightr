@@ -50,6 +50,10 @@ export const SearchModal: React.FC<SearchModalProps> = ({
         return () => window.removeEventListener('keydown', handleGlobalKeyDown);
     }, [isOpen, onClose]);
 
+    useEffect(() => {
+        setSelectedIndex(0);
+    }, [searchQuery]);
+
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === 'ArrowDown') {
             e.preventDefault();
@@ -58,6 +62,8 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             e.preventDefault();
             setSelectedIndex((prev) => (prev - 1 + allResults.length) % allResults.length);
         } else if (e.key === 'Enter') {
+            if (e.nativeEvent.isComposing) return; // Prevent opening on IME Japanese conversation confirmation
+
             if (allResults[selectedIndex]) {
                 onOpenWorkspace(allResults[selectedIndex].path);
                 onClose();
