@@ -1,0 +1,93 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag name for the release (e.g. v0.0.4)'
+        required: true
+        default: 'v0.0.4'
+
+jobs:
+  publish-tauri:
+    permissions:
+      contents: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: 'macos-latest'
+            target: 'aarch64-apple-darwin'
+            arch: 'aarch64'
+            os: 'macos'
+          - platform: 'macos-latest'
+            target: 'x86_64-apple-darwin'
+            arch: 'x86_64'
+            os: 'macos'
+          - platform: 'ubuntu-22.04'
+            target: ''
+            arch: 'x86_64'
+            os: 'linux'
+
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.os == 'macos' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      - name: Install Linux system dependencies
+        if: matrix.os == 'linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev \
+            libappindicator3-dev \
+            librsvg2-dev \
+            patchelf
+
+      - name: Install frontend dependencies
+        run: npm install
+
+      - name: Build app bundle (macOS)
+        if: matrix.os == 'macos'
+        run: npm run tauri build -- --target ${{ matrix.target }} --bundles app
+
+      - name: Create DMG with hdiutil (macOS)
+        if: matrix.os == 'macos'
+        run: |
+          VERSION=$(python3 -c "import json; print(json.load(open('src-tauri/tauri.conf.json'))['version'])")
+          APP_PATH="src-tauri/target/${{ matrix.target }}/release/bundle/macos/Spotlightr.app"
+          DMG_NAME="Spotlightr_${VERSION}_${{ matrix.arch }}.dmg"
+          hdiutil create -volname "Spotlightr" -srcfolder "$APP_PATH" -ov -format UDZO "$DMG_NAME"
+          echo "UPLOAD_FILES=$DMG_NAME" >> $GITHUB_ENV
+
+      - name: Build Linux Bundles (DEB)
+        if: matrix.os == 'linux'
+        run: |
+          npm run tauri build -- --bundles deb
+          DEB=$(find src-tauri/target/release/bundle/deb -name "*.deb" | head -1)
+          echo "UPLOAD_FILES=$DEB" >> $GITHUB_ENV
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+          name: 'Spotlightr ${{ github.event_name == ''workflow_dispatch'' && inputs.tag || github.ref_name }}'
+          draft: true
+          files: ${{ env.UPLOAD_FILES }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

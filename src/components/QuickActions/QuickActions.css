@@ -1,0 +1,84 @@
+/* Default Mode Buttons */
+.btn-meet,
+.btn-teams {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.75rem;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.18s ease;
+    white-space: nowrap;
+}
+
+.btn-meet {
+    background-color: rgba(0, 191, 165, 0.15);
+    border-color: rgba(0, 191, 165, 0.35);
+    color: #00BFA5;
+}
+
+.btn-meet:hover {
+    background-color: rgba(0, 191, 165, 0.28);
+    border-color: #00BFA5;
+    box-shadow: 0 0 8px rgba(0, 191, 165, 0.3);
+    transform: translateY(-1px);
+}
+
+.btn-teams {
+    background-color: rgba(112, 101, 210, 0.15);
+    border-color: rgba(112, 101, 210, 0.35);
+    color: #7B83EB;
+}
+
+.btn-teams:hover {
+    background-color: rgba(112, 101, 210, 0.28);
+    border-color: #7B83EB;
+    box-shadow: 0 0 8px rgba(112, 101, 210, 0.3);
+    transform: translateY(-1px);
+}
+
+/* Compact / dock mode variants */
+.btn-meet-dock {
+    background: rgba(0, 191, 165, 0.12);
+    border: 1px solid rgba(0, 191, 165, 0.3);
+}
+
+.btn-meet-dock:hover {
+    background: rgba(0, 191, 165, 0.25) !important;
+    border-color: #00BFA5 !important;
+}
+
+.btn-teams-dock {
+    background: rgba(112, 101, 210, 0.12);
+    border: 1px solid rgba(112, 101, 210, 0.3);
+}
+
+.btn-teams-dock:hover {
+    background: rgba(112, 101, 210, 0.25) !important;
+    border-color: #7B83EB !important;
+}
+
+/* Error toast for Meet/Teams not found */
+.meet-error-toast {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(30, 30, 40, 0.92);
+    backdrop-filter: blur(8px);
+    color: #f87171;
+    border: 1px solid rgba(248, 113, 113, 0.4);
+    padding: 0.6rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    z-index: 9999;
+    pointer-events: none;
+    animation: fadeIn 0.2s ease-out;
+    max-width: calc(100vw - 3rem);
+    text-align: center;
+}

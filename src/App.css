@@ -1,0 +1,439 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  animation: fadeInSlideUp 0.4s ease-out;
+}
+
+/* ===== Compact / Dock Mode ===== */
+.app-container.compact {
+  padding: 0.5rem;
+  align-items: center;
+  max-width: 100%;
+}
+
+.app-container.compact .header {
+  margin-bottom: 0.5rem;
+  justify-content: center;
+}
+
+.app-container.compact .section {
+  margin-bottom: 0.5rem;
+  width: 100%;
+}
+
+.app-container.compact.horizontal {
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: 100vh;
+  padding: 0 1rem;
+}
+
+.app-container.compact.horizontal::-webkit-scrollbar {
+  display: none;
+}
+
+.app-container.compact.horizontal .section {
+  width: auto;
+  margin-bottom: 0;
+  margin-right: 0.5rem;
+}
+
+.dock-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+}
+
+.app-container.compact.horizontal .dock-list {
+  flex-direction: row;
+}
+
+.app-container.compact.horizontal>.dock-list {
+  margin-bottom: 0 !important;
+  margin-right: 0.5rem;
+}
+
+.dock-tile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.15s ease;
+  border-radius: 12px;
+  box-sizing: content-box;
+  overflow: visible !important;
+}
+
+.dock-tile:hover {
+  transform: scale(1.25);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 10;
+}
+
+.dock-tile .tile-icon {
+  margin-right: 0;
+  font-size: 2.8rem;
+  width: 3.2rem;
+  height: 3.2rem;
+}
+
+/* Tooltip shown on hover */
+.dock-tooltip {
+  position: absolute;
+  left: calc(100% + 0.6rem);
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  color: #ffffff;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 100;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.app-container.compact.horizontal .dock-tooltip {
+  left: 50%;
+  top: auto;
+  bottom: calc(100% + 0.6rem);
+  transform: translateX(-50%);
+}
+
+.dock-tile:hover .dock-tooltip {
+  opacity: 1;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  background: linear-gradient(to right, #60a5fa, #a78bfa);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.section {
+  margin-bottom: 2rem;
+}
+
+.section h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-bottom: 1rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Theme Switcher */
+.theme-switcher {
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.theme-btn {
+  background: transparent;
+  border: none;
+  border-radius: 16px;
+  padding: 0.5rem 0.75rem;
+  color: var(--text-muted);
+  box-shadow: none;
+}
+
+.theme-btn:hover {
+  background: rgba(128, 128, 128, 0.1);
+  color: var(--text-main);
+  transform: none;
+}
+
+.theme-btn.active {
+  background: var(--primary-color);
+  color: white;
+}
+
+/* Workspace Tile */
+.workspace-tile {
+  display: flex;
+  align-items: center;
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.workspace-tile:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+  background: var(--hover-glass);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.tile-icon {
+  font-size: 3rem;
+  margin-right: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  flex-shrink: 0;
+}
+
+.tile-info {
+  flex-grow: 1;
+  min-width: 0;
+  /* for text truncation */
+}
+
+.tile-name {
+  font-weight: 600;
+  font-size: 1.125rem;
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tile-path {
+  font-size: 0.875rem;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tile-actions {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  gap: 0.25rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.workspace-tile:hover .tile-actions,
+.favorite-btn.active {
+  opacity: 1;
+}
+
+.favorite-btn,
+.edit-btn {
+  background: transparent;
+  border: none;
+  padding: 0.35rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.favorite-btn:hover,
+.edit-btn:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--modal-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content {
+  width: 90%;
+  max-width: 480px;
+  padding: 2.5rem;
+  background: var(--modal-bg);
+  border: 1px solid var(--modal-border);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border-radius: 12px;
+  animation: scaleIn 0.2s ease-out;
+  color: var(--text-main);
+}
+
+.modal-header {
+  margin-bottom: 1.5rem;
+}
+
+.modal-header h2 {
+  font-size: 1.5rem;
+  color: var(--text-main);
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.form-group input {
+  width: 100%;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--text-main);
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: all 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #2563eb;
+  border-color: #2563eb;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border: 1px solid var(--border-glass);
+  color: var(--text-main);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  font-weight: 500;
+}
+
+.btn-secondary:hover {
+  background-color: var(--hover-glass);
+  border-color: var(--border-glass);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ===== Search UI ===== */
+.search-container {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), margin 0.3s;
+  width: 0;
+  margin-right: 0;
+}
+
+.search-container.visible {
+  width: 180px;
+  margin-right: 0.25rem;
+}
+
+.search-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  width: 100%;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-input::placeholder {
+  color: #64748b;
+}
+
+.search-input:focus {
+  border-color: var(--primary-color);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+}
+
+.search-input.hidden {
+  padding: 0;
+  border: none;
+  opacity: 0;
+}
