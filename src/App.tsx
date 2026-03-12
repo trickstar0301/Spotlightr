@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, CSSProperties } from "react";
 import { Workspace } from './types';
 import { useWorkspaces } from './hooks/useWorkspaces';
 import { useWindowLayout } from './hooks/useWindowLayout';
@@ -26,8 +26,13 @@ import {
 } from '@dnd-kit/sortable';
 import './App.css';
 
+const MIN_DOCK_ICON_SIZE = 18;
+const MAX_DOCK_ICON_SIZE = 180;
+const DOCK_ICON_TILE_RATIO = 0.75; // change this to adjust dock icon scaling relative to tile size
+const DOCK_TILE_EXTRA_PADDING = 12;
+
 function App() {
-  const { isCompact, isHorizontal } = useWindowLayout();
+  const { isCompact, isHorizontal, dockTileSize } = useWindowLayout();
   const {
     editorCmd,
     alwaysOnTop,
@@ -214,8 +219,26 @@ function App() {
     })
   );
 
+  const dockIconSize = Math.round(
+    Math.max(
+      MIN_DOCK_ICON_SIZE,
+      Math.min(MAX_DOCK_ICON_SIZE, dockTileSize * DOCK_ICON_TILE_RATIO)
+    )
+  );
+
+  const compactDockVariables: CSSProperties | undefined = isCompact
+    ? {
+      '--dock-tile-size': `${Math.max(dockTileSize, dockIconSize + DOCK_TILE_EXTRA_PADDING)}px`,
+      '--dock-icon-size': `${dockIconSize}px`
+    } as CSSProperties
+    : undefined;
+
   return (
-    <div ref={appRef} className={`app-container${isCompact ? ' compact' : ''}${isCompact && isHorizontal ? ' horizontal' : ''}`}>
+    <div
+      ref={appRef}
+      className={`app-container${isCompact ? ' compact' : ''}${isCompact && isHorizontal ? ' horizontal' : ''}`}
+      style={compactDockVariables}
+    >
 
       {!isCompact && (
         <header className="header">

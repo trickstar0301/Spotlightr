@@ -17,7 +17,8 @@ pub fn run() {
             workspace::save_workspaces,
             vscode::fetch_vscode_recent,
             applescript::focus_google_meet,
-            applescript::focus_ms_teams
+            applescript::focus_ms_teams,
+            applescript::focus_google_calendar
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

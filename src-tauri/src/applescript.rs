@@ -88,3 +88,15 @@ pub fn focus_ms_teams() -> Result<String, String> {
 pub fn focus_ms_teams() -> Result<String, String> {
     Err("This feature is only supported on macOS.".to_string())
 }
+
+#[cfg(target_os = "macos")]
+#[tauri::command]
+pub fn focus_google_calendar() -> Result<String, String> {
+    focus_chrome_tab("calendar.google.com")
+}
+
+#[cfg(not(target_os = "macos"))]
+#[tauri::command]
+pub fn focus_google_calendar() -> Result<String, String> {
+    Err("This feature is only supported on macOS.".to_string())
+}

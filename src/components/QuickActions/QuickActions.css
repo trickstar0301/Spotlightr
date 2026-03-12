@@ -1,6 +1,7 @@
 /* Default Mode Buttons */
 .btn-meet,
-.btn-teams {
+.btn-teams,
+.btn-calendar {
     display: flex;
     align-items: center;
     gap: 0.35rem;
@@ -16,28 +17,41 @@
 }
 
 .btn-meet {
-    background-color: rgba(0, 191, 165, 0.15);
+    background-color: rgba(0, 191, 165, 0.18);
     border-color: rgba(0, 191, 165, 0.35);
-    color: #00BFA5;
+    color: #018b7d;
 }
 
 .btn-meet:hover {
-    background-color: rgba(0, 191, 165, 0.28);
+    background-color: rgba(0, 191, 165, 0.32);
     border-color: #00BFA5;
     box-shadow: 0 0 8px rgba(0, 191, 165, 0.3);
     transform: translateY(-1px);
 }
 
 .btn-teams {
-    background-color: rgba(112, 101, 210, 0.15);
+    background-color: rgba(112, 101, 210, 0.18);
     border-color: rgba(112, 101, 210, 0.35);
-    color: #7B83EB;
+    color: #595fc3;
 }
 
 .btn-teams:hover {
-    background-color: rgba(112, 101, 210, 0.28);
+    background-color: rgba(112, 101, 210, 0.32);
     border-color: #7B83EB;
     box-shadow: 0 0 8px rgba(112, 101, 210, 0.3);
+    transform: translateY(-1px);
+}
+
+.btn-calendar {
+    background-color: rgba(26, 115, 232, 0.18);
+    border-color: rgba(26, 115, 232, 0.35);
+    color: #1b5fb9;
+}
+
+.btn-calendar:hover {
+    background-color: rgba(26, 115, 232, 0.32);
+    border-color: #1A73E8;
+    box-shadow: 0 0 8px rgba(26, 115, 232, 0.3);
     transform: translateY(-1px);
 }
 
@@ -62,8 +76,18 @@
     border-color: #7B83EB !important;
 }
 
-/* Error toast for Meet/Teams not found */
-.meet-error-toast {
+.btn-calendar-dock {
+    background: rgba(26, 115, 232, 0.12);
+    border: 1px solid rgba(26, 115, 232, 0.3);
+}
+
+.btn-calendar-dock:hover {
+    background: rgba(26, 115, 232, 0.25) !important;
+    border-color: #1A73E8 !important;
+}
+
+/* Error toast for quick action focus failures */
+.focus-error-toast {
     position: fixed;
     bottom: 1.5rem;
     left: 50%;

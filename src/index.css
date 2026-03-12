@@ -54,17 +54,29 @@
   background-color: var(--bg-main);
 }
 
+:root,
+:root.dark,
+html {
+  background: radial-gradient(circle at top right, #1e293b, #0f172a);
+}
+
+:root.light,
+:root.light html {
+  background: radial-gradient(circle at top right, #f1f5f9, #f8fafc);
+}
+
 body {
   margin: 0;
   display: flex;
   min-height: 100vh;
   min-width: 100vw;
   font-family: inherit;
-  background: radial-gradient(circle at top right, #1e293b, #0f172a);
+  background: inherit;
+  overscroll-behavior: none;
 }
 
 :root.light body {
-  background: radial-gradient(circle at top right, #f1f5f9, #f8fafc);
+  overscroll-behavior: none;
 }
 
 #root {

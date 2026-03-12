@@ -123,7 +123,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, e
                 </div>
 
                 <div className="modal-actions" style={{ marginTop: '2rem' }}>
-                    <button type="button" onClick={onClose} className="btn-primary" style={{ width: '100%' }}>Done</button>
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="btn-primary"
+                        style={{ width: '100%', fontSize: '0.95rem', padding: '0.65rem 0' }}
+                    >
+                        Done
+                    </button>
                 </div>
             </div>
         </div>

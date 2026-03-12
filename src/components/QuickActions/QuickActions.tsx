@@ -1,16 +1,30 @@
 import { useState, useEffect } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import { type } from '@tauri-apps/plugin-os';
-import { SiGooglemeet } from 'react-icons/si';
+import type { IconType } from 'react-icons';
+import { SiGooglemeet, SiGooglecalendar } from 'react-icons/si';
 import { BsMicrosoftTeams } from 'react-icons/bs';
 import './QuickActions.css';
+
+const QUICK_ACTION_ICON_SIZE = 20;
 
 interface QuickActionsProps {
     isCompact: boolean;
 }
 
+interface FocusAction {
+    key: string;
+    label: string;
+    shortLabel: string;
+    command: string;
+    Icon: IconType;
+    color: string;
+    buttonClass: string;
+    dockClass: string;
+}
+
 export function QuickActions({ isCompact }: QuickActionsProps) {
-    const [meetError, setMeetError] = useState<string | null>(null);
+    const [focusError, setFocusError] = useState<string | null>(null);
     const [isMac, setIsMac] = useState(true);
 
     useEffect(() => {
@@ -18,25 +32,51 @@ export function QuickActions({ isCompact }: QuickActionsProps) {
     }, []);
 
     const showError = (msg: string) => {
-        setMeetError(msg);
-        setTimeout(() => setMeetError(null), 3000);
+        setFocusError(msg);
+        setTimeout(() => setFocusError(null), 3000);
     };
 
-    const handleFocusMeet = async () => {
+    const handleFocus = async (command: string, label: string) => {
         try {
-            await invoke('focus_google_meet');
+            await invoke(command);
         } catch (error) {
-            showError(`Google Meet: ${error}`);
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            showError(`${label}: ${errorMessage}`);
         }
     };
 
-    const handleFocusTeams = async () => {
-        try {
-            await invoke('focus_ms_teams');
-        } catch (error) {
-            showError(`Microsoft Teams: ${error}`);
-        }
-    };
+    const actions: FocusAction[] = [
+        {
+            key: 'meet',
+            label: 'Google Meet',
+            shortLabel: 'Meet',
+            command: 'focus_google_meet',
+            Icon: SiGooglemeet,
+            color: '#00BFA5',
+            buttonClass: 'btn-meet',
+            dockClass: 'btn-meet-dock',
+        },
+        {
+            key: 'teams',
+            label: 'Microsoft Teams',
+            shortLabel: 'Teams',
+            command: 'focus_ms_teams',
+            Icon: BsMicrosoftTeams,
+            color: '#7B83EB',
+            buttonClass: 'btn-teams',
+            dockClass: 'btn-teams-dock',
+        },
+        {
+            key: 'calendar',
+            label: 'Google Calendar',
+            shortLabel: 'Calendar',
+            command: 'focus_google_calendar',
+            Icon: SiGooglecalendar,
+            color: '#1A73E8',
+            buttonClass: 'btn-calendar',
+            dockClass: 'btn-calendar-dock',
+        },
+    ];
 
     if (!isMac) {
         return null;
@@ -45,32 +85,27 @@ export function QuickActions({ isCompact }: QuickActionsProps) {
     if (isCompact) {
         return (
             <>
-                {meetError && (
-                    <div className="meet-error-toast">{meetError}</div>
+                {focusError && (
+                    <div className="focus-error-toast">{focusError}</div>
                 )}
-                <div className="dock-list quick-actions-dock" style={{ marginBottom: '0.5rem' }}>
-                    <button
-                        onClick={handleFocusMeet}
-                        className="dock-tile btn-meet-dock"
-                        aria-label="Focus Google Meet"
-                        title="Google Meet"
-                    >
-                        <div className="tile-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <SiGooglemeet size="2.4rem" color="#00BFA5" />
-                        </div>
-                        <span className="dock-tooltip">Google Meet</span>
-                    </button>
-                    <button
-                        onClick={handleFocusTeams}
-                        className="dock-tile btn-teams-dock"
-                        aria-label="Focus Microsoft Teams"
-                        title="Microsoft Teams"
-                    >
-                        <div className="tile-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <BsMicrosoftTeams size="2.4rem" color="#7B83EB" />
-                        </div>
-                        <span className="dock-tooltip">Microsoft Teams</span>
-                    </button>
+                <div
+                    className="dock-list quick-actions-dock"
+                    style={{ marginTop: '0.5rem', marginBottom: '0.5rem' }}
+                >
+                    {actions.map(({ key, label, command, Icon, color, dockClass }) => (
+                        <button
+                            key={key}
+                            onClick={() => handleFocus(command, label)}
+                            className={`dock-tile ${dockClass}`}
+                            aria-label={`Focus ${label}`}
+                            title={label}
+                        >
+                            <div className="tile-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <Icon color={color} />
+                            </div>
+                            <span className="dock-tooltip">{label}</span>
+                        </button>
+                    ))}
                 </div>
             </>
         );
@@ -79,27 +114,21 @@ export function QuickActions({ isCompact }: QuickActionsProps) {
     // Normal header layout
     return (
         <>
-            {meetError && (
-                <div className="meet-error-toast">{meetError}</div>
+            {focusError && (
+                <div className="focus-error-toast">{focusError}</div>
             )}
-            <button
-                onClick={handleFocusMeet}
-                className="btn-meet"
-                aria-label="Focus Google Meet"
-                title="Focus Google Meet open in Chrome"
-            >
-                <SiGooglemeet size={20} color="#00BFA5" />
-                Meet
-            </button>
-            <button
-                onClick={handleFocusTeams}
-                className="btn-teams"
-                aria-label="Focus Microsoft Teams"
-                title="Focus Microsoft Teams open in Chrome"
-            >
-                <BsMicrosoftTeams size={20} color="#7B83EB" />
-                Teams
-            </button>
+            {actions.map(({ key, label, shortLabel, command, Icon, color, buttonClass }) => (
+                <button
+                    key={key}
+                    onClick={() => handleFocus(command, label)}
+                    className={buttonClass}
+                    aria-label={`Focus ${label}`}
+                    title={`Focus ${label} open in Chrome`}
+                >
+                    <Icon size={QUICK_ACTION_ICON_SIZE} color={color} />
+                    {shortLabel}
+                </button>
+            ))}
         </>
     );
 }

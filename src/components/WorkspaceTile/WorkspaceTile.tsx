@@ -34,6 +34,22 @@ export const WorkspaceTile: React.FC<WorkspaceTileProps> = ({
         onEdit?.(e, workspace);
     };
 
+    const renderIcon = () => {
+        if (workspace.icon) {
+            if (workspace.icon.startsWith('data:image')) {
+                return (
+                    <img
+                        src={workspace.icon}
+                        alt="icon"
+                        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                    />
+                );
+            }
+            return <span className="workspace-icon-text">{workspace.icon}</span>;
+        }
+        return <FaFolder color="#60a5fa" style={{ width: '100%', height: '100%' }} />;
+    };
+
     if (compact) {
         return (
             <div
@@ -42,17 +58,7 @@ export const WorkspaceTile: React.FC<WorkspaceTileProps> = ({
                 onClick={handleTileClick}
                 title={workspace.name}
             >
-                <div className="tile-icon">
-                    {workspace.icon ? (
-                        workspace.icon.startsWith('data:image') ? (
-                            <img src={workspace.icon} alt="icon" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                        ) : (
-                            <span style={{ fontSize: '1em' }}>{workspace.icon}</span>
-                        )
-                    ) : (
-                        <FaFolder color="#60a5fa" />
-                    )}
-                </div>
+                <div className="tile-icon">{renderIcon()}</div>
                 <span className="dock-tooltip">{workspace.name}</span>
             </div>
         );
@@ -66,17 +72,7 @@ export const WorkspaceTile: React.FC<WorkspaceTileProps> = ({
             onContextMenu={workspace.isFavorite ? handleEditClick : undefined}
             title={workspace.isFavorite ? "Right-click to edit" : undefined}
         >
-            <div className="tile-icon">
-                {workspace.icon ? (
-                    workspace.icon.startsWith('data:image') ? (
-                        <img src={workspace.icon} alt="icon" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                    ) : (
-                        <span style={{ fontSize: '1em' }}>{workspace.icon}</span>
-                    )
-                ) : (
-                    <FaFolder color="#60a5fa" />
-                )}
-            </div>
+            <div className="tile-icon">{renderIcon()}</div>
             <div className="tile-info">
                 <div className="tile-name">{workspace.name}</div>
                 <div className="tile-path" title={workspace.path}>{workspace.path}</div>
@@ -102,4 +98,3 @@ export const WorkspaceTile: React.FC<WorkspaceTileProps> = ({
         </div>
     );
 };
-
