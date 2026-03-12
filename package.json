@@ -3,7 +3,7 @@
   "private": true,
   "description": "A Tauri-based desktop dashboard to quickly launch your recent and favorite workspaces.",
   "author": "trickstar",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
   "scripts": {
     "dev": "vite",
