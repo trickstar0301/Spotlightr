@@ -106,6 +106,10 @@ button {
   font-family: inherit;
 }
 
+button:focus {
+  outline: none;
+}
+
 button:hover {
   background-color: var(--hover-glass);
   border-color: rgba(128, 128, 128, 0.2);

@@ -10,6 +10,7 @@ const QUICK_ACTION_ICON_SIZE = 20;
 
 interface QuickActionsProps {
     isCompact: boolean;
+    selectedId?: string | null;
 }
 
 interface FocusAction {
@@ -23,7 +24,7 @@ interface FocusAction {
     dockClass: string;
 }
 
-export function QuickActions({ isCompact }: QuickActionsProps) {
+export function QuickActions({ isCompact, selectedId }: QuickActionsProps) {
     const [focusError, setFocusError] = useState<string | null>(null);
     const [isMac, setIsMac] = useState(true);
 
@@ -47,7 +48,7 @@ export function QuickActions({ isCompact }: QuickActionsProps) {
 
     const actions: FocusAction[] = [
         {
-            key: 'meet',
+            key: 'action-meet',
             label: 'Google Meet',
             shortLabel: 'Meet',
             command: 'focus_google_meet',
@@ -57,7 +58,7 @@ export function QuickActions({ isCompact }: QuickActionsProps) {
             dockClass: 'btn-meet-dock',
         },
         {
-            key: 'teams',
+            key: 'action-teams',
             label: 'Microsoft Teams',
             shortLabel: 'Teams',
             command: 'focus_ms_teams',
@@ -67,7 +68,7 @@ export function QuickActions({ isCompact }: QuickActionsProps) {
             dockClass: 'btn-teams-dock',
         },
         {
-            key: 'calendar',
+            key: 'action-calendar',
             label: 'Google Calendar',
             shortLabel: 'Calendar',
             command: 'focus_google_calendar',
@@ -90,13 +91,13 @@ export function QuickActions({ isCompact }: QuickActionsProps) {
                 )}
                 <div
                     className="dock-list quick-actions-dock"
-                    style={{ marginTop: '0.5rem', marginBottom: '0.5rem' }}
                 >
                     {actions.map(({ key, label, command, Icon, color, dockClass }) => (
                         <button
                             key={key}
+                            data-workspace-id={key}
                             onClick={() => handleFocus(command, label)}
-                            className={`dock-tile ${dockClass}`}
+                            className={`dock-tile ${dockClass}${selectedId === key ? ' selected' : ''}`}
                             aria-label={`Focus ${label}`}
                             title={label}
                         >
@@ -121,7 +122,7 @@ export function QuickActions({ isCompact }: QuickActionsProps) {
                 <button
                     key={key}
                     onClick={() => handleFocus(command, label)}
-                    className={buttonClass}
+                    className={`${buttonClass}${selectedId === key ? ' selected' : ''}`}
                     aria-label={`Focus ${label}`}
                     title={`Focus ${label} open in Chrome`}
                 >

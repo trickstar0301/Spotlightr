@@ -181,6 +181,20 @@ function App() {
 
       if (event.key === 'Enter') {
         if (selectedWorkspaceId) {
+          if (selectedWorkspaceId.startsWith('action-')) {
+            event.preventDefault();
+            const actionMap: Record<string, string> = {
+              'action-meet': 'focus_google_meet',
+              'action-teams': 'focus_ms_teams',
+              'action-calendar': 'focus_google_calendar'
+            };
+            const command = actionMap[selectedWorkspaceId];
+            if (command) {
+              import('@tauri-apps/api/core').then(({ invoke }) => invoke(command)).catch(console.error);
+            }
+            return;
+          }
+
           const combined = [...favorites, ...recents];
           const ws = combined.find(w => w.id === selectedWorkspaceId);
           if (ws) {
@@ -244,7 +258,7 @@ function App() {
         <header className="header">
           <h1>Spotlightr</h1>
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-            <QuickActions isCompact={false} />
+            <QuickActions isCompact={false} selectedId={selectedWorkspaceId} />
             <button
               onClick={() => setIsSettingsOpen(true)}
               className="btn-secondary"
@@ -261,7 +275,7 @@ function App() {
 
       {
         isCompact && (
-          <QuickActions isCompact={true} />
+          <QuickActions isCompact={true} selectedId={selectedWorkspaceId} />
         )
       }
 
